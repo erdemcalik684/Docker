@@ -1,0 +1,5 @@
+=> docker container run --name denemecon ozgurozturknet/adanzyedocker java app1
+java app1 komutunu girerek app1 uygulamasını başlattık.
+--name parametresi ile  container'ın adı da denemecon olarak belirttik.
+
+  
