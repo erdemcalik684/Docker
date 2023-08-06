@@ -1,0 +1,220 @@
+CUSTOM BRIDGE NETWORK OLUŞTURMA
+---------------------------------
+Ayrı ayrı containerları farklı networklere bağlayabiliriz..
+
+Containerlar arası network izolasyonu sağlamak istersek ayrı bridge networkler yaratarak bunu sağlayabiliriz.
+Varsayılan dışın IP aralıkları tanımlanabilir.
+
+=> docker network create kopru1
+
+=>  docker network inspect kopru1
+[
+    {
+        "Name": "kopru1",
+        "Id": "39e212b48af14369c92bb8a3b5292e1ff2ef6cc60bf2672aed40eae4466a5ee2",
+        "Created": "2023-08-06T18:02:40.741809571Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16",
+                    "Gateway": "172.20.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+
+-------------------------------
+BİRİNCİ CONTAİNER 
+-------------------------------
+=>docker container run -dit --name websunucu --network kopru1 ozgurozturknet/adanzyedocker sh
+b28f1d1911125629465803b291e4dac73fc15de788ac454f6f7f46f0ad06f8cd
+
+
+-dit komutu ile arka tarafta devam etsin istiyoruz.
+
+-d ve -it nin birleşimi ile ...
+
+
+
+-------------------------------
+İKİNCİ CONTAİNER 
+-------------------------------
+=> docker container run -dit --name database --network kopru1 ozgurozturknet/adanzyedocker sh
+767777f4e16deb40a59bc443f9b5f5ea2c6c09bdd1c0695ef6712b7ff2820e6b
+
+=> docker ps -a
+CONTAINER ID   IMAGE                          COMMAND   CREATED              STATUS          PORTS     NAMES
+767777f4e16d   ozgurozturknet/adanzyedocker   "sh"      5 seconds ago        Up 4 seconds    80/tcp    database
+b28f1d191112   ozgurozturknet/adanzyedocker   "sh"      About a minute ago   Up 59 seconds   80/tcp    websunucu
+
+
+----------------------------------------
+KOPRU1 ADLI NETWORKUN İÇİNİ GÖRÜNTÜLEMEK
+----------------------------------------
+=> docker network inspect kopru1
+[
+    {
+        "Name": "kopru1",
+        "Id": "39e212b48af14369c92bb8a3b5292e1ff2ef6cc60bf2672aed40eae4466a5ee2",
+        "Created": "2023-08-06T18:02:40.741809571Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16",
+                    "Gateway": "172.20.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "767777f4e16deb40a59bc443f9b5f5ea2c6c09bdd1c0695ef6712b7ff2820e6b": {
+                "Name": "database",
+                "EndpointID": "5620edb57223ec75f2280fdd9758770182fb03f12640d4788e3fee84bb9fd640",
+                "MacAddress": "02:42:ac:14:00:03",
+                "IPv4Address": "172.20.0.3/16",
+                "IPv6Address": ""
+            },
+            "b28f1d1911125629465803b291e4dac73fc15de788ac454f6f7f46f0ad06f8cd": {
+                "Name": "websunucu",
+                "EndpointID": "711712b3c568decbfedd53955a6a5ea7d778f41879be73144ab4fd2db418ed94",
+                "MacAddress": "02:42:ac:14:00:02",
+                "IPv4Address": "172.20.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+
+-----------------------------------------------------------------
+CONTAINERIN İÇERİSİNE BAĞLANMAK İÇİN ( -d kullanmıştık çünkü )
+
+CONTAINERLAR ARASI BAĞLANTI VAR MI YOK MU KONTROLÜ(PING CONTROL)
+-----------------------------------------------------------------
+
+=> docker attach websunucu
+/usr/src/myapp # ping database
+PING database (172.20.0.3) 56(84) bytes of data.
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=1 ttl=64 time=0.114 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=2 ttl=64 time=0.050 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=3 ttl=64 time=0.053 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=4 ttl=64 time=0.057 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=5 ttl=64 time=0.058 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=6 ttl=64 time=0.048 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=7 ttl=64 time=0.052 ms
+64 bytes from database.kopru1 (172.20.0.3): icmp_seq=8 ttl=64 time=0.057 ms
+^C
+
+
+
+=> docker attach database
+/usr/src/myapp # ping websunucu
+PING websunucu (172.20.0.3) 56(84) bytes of data.
+64 bytes from websunucu.kopru1 (172.20.0.3): icmp_seq=1 ttl=64 time=0.052 ms
+64 bytes from websunucu.kopru1 (172.20.0.3): icmp_seq=2 ttl=64 time=0.054 ms
+64 bytes from websunucu.kopru1 (172.20.0.3): icmp_seq=3 ttl=64 time=0.051 ms
+64 bytes from websunucu.kopru1 (172.20.0.3): icmp_seq=4 ttl=64 time=0.054 ms
+
+
+ctrl+p+q ile çıkabilirsin....
+
+
+
+=> docker network create --driver=bridge --subnet=10.10.0.0/16 --ip-range=10.10.10.0/24 --gateway=10.10.10.10 kopru2
+e4bf24fd87331b0cfcc29efb3a755428ad41440b1b4985f4408a8cf696a31e08
+PS C:\Windows\system32> docker network ls
+NETWORK ID     NAME               DRIVER    SCOPE
+ae81cc7ed928   bridge             bridge    local
+51f14eceb2e3   docker_network     bridge    local
+9044c4534eac   docker_network_2   bridge    local
+5ccda2524e18   host               host      local
+39e212b48af1   kopru1             bridge    local
+e4bf24fd8733   kopru2             bridge    local
+e782ef5873df   none               null      local
+
+
+
+-------------------------------------------------------------
+İLGİLİ CONTAINERI BU BRIDGE NETWORKE BAĞLA DİYORUZ .
+-------------------------------------------------------------
+=> docker network connect kopru2 database
+
+docker attach database
+/usr/src/myapp # ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:14:00:02
+          inet addr:172.20.0.2  Bcast:172.20.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1634 (1.5 KiB)  TX bytes:476 (476.0 B)
+
+eth1      Link encap:Ethernet  HWaddr 02:42:0A:0A:0A:00
+          inet addr:10.10.10.0  Bcast:10.10.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:15 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1242 (1.2 KiB)  TX bytes:0 (0.0 B)
+
+görüldüğü üzere eth1 eklendi. yani 1 container ı birden fazla networke bağlayabiliyoruz.
+
+
+ docker network disconnect kopru2 database
+PS C:\Windows\system32> docker attach database
+/usr/src/myapp # ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:14:00:02
+          inet addr:172.20.0.2  Bcast:172.20.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1634 (1.5 KiB)  TX bytes:476 (476.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:436 (436.0 B)  TX bytes:436 (436.0 B)
+
+
+aynı şekilde bağlantıyı koparabiliyoruz.
+
+
+
+=> docker network rm NETWORKADI
+ile network bağlantısını silebiliyoruz.
+eğer bir networke container bağlıysa o network silinemez.ilk önce container silinmelidir.
+
