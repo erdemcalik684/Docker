@@ -1,0 +1,23 @@
+
+-----------------------------
+CONTAINER TEMELLERİ -3 
+-----------------------------
+=> docker container run --name websunucu -p 80:80 -d ozgurozturknet/adanzyedocker
+=> docker container run --name websunucu2 -p 80:80 -d ozgurozturknet/adanzyedocker
+
+ile image oluşturduk...
+
+  --name parametresi => containera custom ad verdik bu da websunucu'dur veya websunucu2'dur.
+  -p parametresi => bu yaratılan container 80:80 portundan ayağa kalksın istiyoruz.
+  -d parametresi => çalışan uygulama arka planda çalışmaya devam etsin istiyoruz.
+
+  
+=> docker container exec -it websunucu  sh 
+
+ exec parametresi => çalışan bir containera bağlanmak istiyorsak bu kullanılır. 
+ sh  parametresi ile => bu containera shell e bağlan demek.
+ -it parametresi ise =>   --interactive --tty  yani benim komutalarımı bu container içinde interactive bir biçimde çalıştır demek.
+
+=>  docker start CONTAINERID veya CONTAINERADI 
+ start parametresi =>ile container çalıştırılabilir.
+
