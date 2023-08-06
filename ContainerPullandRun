@@ -1,0 +1,15 @@
+Container üzierinden image yaratmak istiyorsak(docker hub)
+
+docker run IMAGENAME
+docker pull IMAGENAME 
+
+şeklinde kullanabiliriz.
+
+=> docker container run -p 80:80 ozgurozturknet/adanzyedocker
+
+şuan bu container çalışıyor durumdadır.
+
+127.0.0.1 ile ilgili uygulama container içerisinde çalışıyor demektir.
+
+
+-p paramaetresi => port belirtmek içindir.
