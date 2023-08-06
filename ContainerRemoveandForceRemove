@@ -1,6 +1,18 @@
-
+----------------------
+RM ve RM -F  KOMUTU
+----------------------
 => docker container rm CONTAINERID 
 Bu komut ile container silinebilir.
 
 => docker container rm -f CONTAINERID 
 ile varolan containerı zorla (force) silmeye çalışıyoruz.
+
+
+----------------------
+PRUNE KOMUTU
+----------------------
+=> docker container prune 
+sistemde çalışmayan tüm durdurulmuş containerları siler...
+
+=> docker image prune -a 
+ile tüm çalışan ve çalışmayan imaj'ları siler...
