@@ -13,3 +13,20 @@ docker pull IMAGENAME
 
 
 -p paramaetresi => port belirtmek içindir.
+
+
+
+-----------------
+EXAMPLE -1 
+-----------------
+=> docker image pull alpine 
+
+docker üzerindeki alpine imajını çektik.
+
+=> docker image pull ozgurozturk/hello-app
+
+hello-app imajını alpine imajını kullanarak yarattığımız için
+
+alpine imajı ile hello-app imajı ID leri aynı olur...
+
+Alpine burda BASE IMAGE olarak yer alır...
