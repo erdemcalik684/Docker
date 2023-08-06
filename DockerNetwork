@@ -1,0 +1,84 @@
+
+----------------------------------------
+DOCKER NETWORK ? 
+----------------------------------------
+
+*Bridge * Host * Macvlan * None * Overlay 
+bu driver sayesinde networklere özellikler sağlayabiliyoruz.
+
+A) Bridge : VARSAYILAN olarak gelir.
+
+         db(172.19.0.2)  <---------------> web(172.19.0.3/5000)
+         mybridge
+	 eth0 : 192.168.1.2/8000
+
+B) Host : Arada izolasyon olmadan yapılır.
+Makinenin ağ kartýna yani bir katman olmasını istemiyorsak.
+
+C) MacVlan :  Direk mac adresi atayarak bir fiziksel vihaz gibi davranmasýný saðlayabiliriz.
+
+D) None : Container hiçbir þekilde að baðlantýsýna sahip olmasýn dersek kullanýlýr.
+
+E) Overlay : Ayný hostlar üstündeki containerlarýn ayný aðda çalýþýyormuþ gibi çalýþmasý istendiði zaman Overlaay 
+networkler devreye girer.
+
+hostA=>db  ---------------- web <=hostB
+external network
+pest-overlay
+
+
+-----------------------------------------------------
+DOCKER NETWORK OBJELERİ - 1 | #BRIDGE | #HOST | #NONE
+----------------------------------------------------
+#BRIDGE
+
+=> docker network ls 
+ile sistemde mevcut olan network bağlantılarını gösterir.
+docker kurulumu ile birlikte 3 adet network objesi gelir.
+*bridge
+*host => buraya bağlı containerlar o makine üzerinde bir çalışan biir processmiş gibi davranır.
+*none
+
+=> docker network inspect bridge
+
+"bridge" network objesinin tüm özelliklerini gösterir.
+docker image inspect IMAGEID gibi  inspect json verisi olarak her türlü özelliði verir.
+docker container inspect CONTAINERID gibi...
+
+=> docker network inspect bridge diyelim.
+buna bağlı olarak.
+
+SUBNET ve GATEWAY kısımları vardır.
+
+=> docker container run -d ozgurozturknet/adanzyedocker 
+=> docker network inspect bridge 
+container kısımda bu çalıştırdığımız container buna bağlı olarak gösterir.
+
+bunun testini böyle de yapabiliriz.
+
+=> docker exec -it CONTAINERID sh
+=> ifconfig 
+gelen veriler bridge inspect ile aynı olacaktır.
+aynı network üzerinde yer alan containerlar birbirleri ile haberleşebilirler.
+
+
+#HOST NETWORK
+=> docker network ls 
+
+=> docker container run -it --name deneme1 --net host ozgurozturknet/adanzyedocker sh
+ile oluþturulan container imajýnýn networkünü host olarak belirledik.
+#ifconfig
+docker0
+eth0
+eth1
+lo
+gibi deðerleri vardýr.
+bridge de eth0 ve eth1 yoktur.
+host : üzerinde baðlý oldýðu sistemin direkt alt yapýsýný kullanýr. 
+
+
+
+#NONE NETWORK 
+=> docker container run -it --name deneme1 --net none ozgurozturknet/adanzyedocker sh
+#ifconfig
+sadece lo vardýr. çünkü hiçbir yerine eriþemez baðlantý olmasýn diyoruz çünkü.
