@@ -1,0 +1,6 @@
+
+=> docker container rm CONTAINERID 
+Bu komut ile container silinebilir.
+
+=> docker container rm -f CONTAINERID 
+ile varolan containerı zorla (force) silmeye çalışıyoruz.
