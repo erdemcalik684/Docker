@@ -1,0 +1,99 @@
+=> docker container run -d -p hostport:container_port 
+şeklinde kullanılır.
+
+=> docker container run -d -p 8080:80 ozgurtozturknet/adanzyedocker
+
+bu instanceın 8080 portuna internet üzerinden eriştik.
+
+-----------------------------------------------
+EXAMPLE -1  (BRIDGE)
+-----------------------------------------------
+Docker nginx image üzerinden sunucu_1 ve sunucu_2 adlı 2 adet container çalıştırıp , 
+sunucu_1 için 1111 portundan ve sunucu_2 için 2222 portundan dışarıya yayın yapmış olacağım
+
+=>   docker container run -p 1111:80 -d --name sunucu_1 nginx
+140dc07229ae7bbbda6a0755c5a9ef63f0683eb3d9d1ae499ee7ed15547c9eb1
+
+
+=>   docker container run -p 2222:80 -d --name sunucu_2 nginx
+da030e62ff9b082b80995a7ecac1456d2e23bb2feb6c8da2409a0609e965b6b2
+
+
+=>   docker container ls -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                     PORTS                  NAMES
+da030e62ff9b   nginx     "/docker-entrypoint.…"   8 seconds ago    Up 7 seconds               0.0.0.0:2222->80/tcp   sunucu_2
+140dc07229ae   nginx     "/docker-entrypoint.…"   43 seconds ago   Up 42 seconds              0.0.0.0:1111->80/tcp   sunucu_1
+
+
+Oluşturulan containerların network ayarlarını listelemek için : 
+=>    docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+ae81cc7ed928   bridge           bridge    local
+d2ffb0ac48a4   custom-network   bridge    local
+5ccda2524e18   host             host      local
+e782ef5873df   none             null      local
+
+
+Bridge network içindeki containerları görmek için : 
+=>    docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "ae81cc7ed928146bdf688d3c5b73985cfac4103b7bb60ac77ba69fe48e6b62a6",
+        "Created": "2023-08-06T16:11:10.691663439Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "140dc07229ae7bbbda6a0755c5a9ef63f0683eb3d9d1ae499ee7ed15547c9eb1": {
+                "Name": "sunucu_1",
+                "EndpointID": "2c94079d0d3e8a9b16b8412de3b56f80f19ede66531758c6878c419da2bd756f",
+                "MacAddress": "02:42:ac:11:00:02",
+                "IPv4Address": "172.17.0.2/16",
+                "IPv6Address": ""
+            },
+            "da030e62ff9b082b80995a7ecac1456d2e23bb2feb6c8da2409a0609e965b6b2": {
+                "Name": "sunucu_2",
+                "EndpointID": "67eb9c75bd868d24a788988787ab6a2488475165181e032ad02c3ff577b01420",
+                "MacAddress": "02:42:ac:11:00:03",
+                "IPv4Address": "172.17.0.3/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+
+
+
+-----------------------------------------------
+EXAMPLE -1  (HOST)
+-----------------------------------------------
+Containerlar bridge’den farklı olarak host network ile çalıştırılırsa , ilgili containerlar host’daki tüm network interface’e erişebilir olacaktır.
+
+
