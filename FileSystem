@@ -1,0 +1,16 @@
+
+------------------------------------
+DOCKER KATMANLI DOSYA SİSTEM YAPISI 
+------------------------------------
+
+Birleşim(union) dosya sistemi üzerine kurulur.
+Yani docker container run -it ozgurozturknet/hello-app sh 
+komutu yazdığımızda 
+#ls 
+dediğimizde
+bin , dev ,etc,home, lib , media , mnt , MYAPP , opt , proc , root , run , sbin
+gibi base dosyalarımız ile ana klasörümüz(MYAPP) aynı yer olmasına denir.
+Sistem dosyaları ile yaratılan dosyamız aynı yerdedir.
+
+=> Docker imajları,base image üzerine inşa edilir.
+
