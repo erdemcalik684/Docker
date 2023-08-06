@@ -1,0 +1,136 @@
+------------------------------------
+DOCKER CONTAINER YAŞAM SÜRESİ
+------------------------------------
+Container başladığında her veri Container kendi yazılabilir katmanına yazar.
+Fakat container durduğu anda bu yazılabilir katmandaki veriler silinir.
+Çünkü durdurduk.
+UNUTMA => Containerlar TEK KULLANIMLIKtır.
+
+
+
+-------------------------------------------
+DOCKER CONTAINER DIŞI VERİ SAKLAMA (VOLUME)
+-------------------------------------------
+
+Containerlar uzun ömürlü olmuyor.
+Bu yüzden VOLUME kullanılıyor.
+Image gibi VOLUME yaratılıyor.
+
+
+=> docker volume create ilkvolume
+ile oluşturulur.
+
+
+=> docker volume inspect ilkvolume
+
+oluşturulan volume in detaylarını görebiliriz...
+Açılan detay kısmından, "Mountpoint" kısmı en önemlisidir.Yani bu volume üzerinde yaratılan dosyalar fiziksel olarak burada tutulur.
+
+Şimdi bu volume bağlayacağımız bir container yaratalım...
+
+  
+---------------------------------------------------------------
+EXAMPLE -1 
+---------------------------------------------------------------
+
+=> docker container run -it -v ilkvolume:/uygulama alpine sh
+  
+-it parametresi => ile interactive bağlantı açtık.
+ilkvolume isimli volume'e bağladık
+bu volumü container içerisinde "uygulama" isimli klasöre bağladık.
+sh parametresi =>  ile shell açtık
+
+yani
+
+=> volume:/bağlamakistediğimiz diye kullanılır.
+shell ortamında açtığın için
+#ls yapabilirsin.
+  
+      bin etc lib uygulama var diye alpine içine uygulama diye bir klasör yaratıldı.
+
+* cd uygulama 
+* touch abc.txt
+* echo "test yazısıdır" >> abc.txt
+* cat abc.txt
+* test yazısıdır şeklinde veri olmalıdır.
+
+exit ile bu containerdan çıkabilirsin...
+
+=> docker container rm CONTAINERID
+ile bu containerý silelim.
+
+=> docker volume ls 
+dediğimizde ilkvolume durur.Container ile baglantısı yok.
+
+=> docker container run -it -v ilkvolume :/deneme alphine sh 
+
+dediğimizde  ls diyelim
+cd deneme de abc.txt dosyası burada erişilebilir...
+yani bu volume burada duruyor, container silinmiş olmasına rağmen ve verilerimizi saklayabiliyoruz.
+burada 
+touch buikinci.txt
+bir volume birden fazla containera bağlayabiliyoruz...
+
+
+=> docker container run -it -v ilkvolume:/deneme2 centos sh 
+ile centos image oluşturulur. 
+*ls 
+*deneme2 isimli klasör gelir.
+*cd deneme2 ile bu oluşturulan txtler gelir.
+yani heryerden erişelebiliriz...
+
+
+
+
+----------------------------------
+VOLUME' SADECE OKUNABİLİR YAPMAK
+----------------------------------
+
+docker container run -it -v ilkvolume:/deneme2:ro centos sh 
+
+RO Paramaetresi ile => readonly anlamına gelir sadece içerisinde oluşturduðumuz txt vs vs leri okuyabiliriz.Touch yapamayız.
+
+
+----------------------------------------
+DOCKER VOLUME BOŞ-DOLU VOLUME DAVRANIŞI
+----------------------------------------
+Boş ve dolu volumeleri containerlara mount edilince nasıl davranıyor ?
+
+---------------
+EXAMPLE -1   
+---------------
+  
+=> docker container run --rm -it ozgurozturnet/adanzyedocker sh
+--rm opsiyonu : bu container kapatıldığı zaman(stop) bunu sil demek.
+yani durdurulduğu zaman silmediği için bunu yaptık.
+
+#usr/src/myapp : ls 
+app1.class app1.java
+exit 
+
+=> docker ps -a dedik hiç bir container yer almaz... çünkü exit stop etmiş olduk.
+
+=> docker volume create deneme1
+=> docker volume ls 
+local deneme1 
+local ilkvolume
+
+=> docker container run --rm -it -v deneme1:/test ozgurozturknet/adanzyedocker sh 
+ls 
+bin dev etc home lib media opt TEST run
+exit
+
+**************************
+Dolu Klasöre Mount Etmek : 
+**************************
+=> docker container run --rm -it -v deneme1:/usr/src/myapp ozgurozturknet/adanzyedocker sh
+app1.class app1.java 
+exit 
+
+=> docker container run --rm -it -v deneme1:/xyz alpine sh
+#ls 
+bin etc XYZ
+ls 
+app1.class app1.java 
+burdada eriþebildik.
+çünkü dolu yerde vardý zaten þimdide boþ haliyle mount ettik.
