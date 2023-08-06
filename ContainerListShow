@@ -1,0 +1,9 @@
+Mevcut olan Docker içerisindeki Containerların listesini görmek için;
+
+docker container ls 
+docker container ps 
+docker container ps -a 
+docker container ls -a
+docker ps -a 
+docker ps 
+şeklinde yeni ve eski türevlerinde şeklinde kullanabiliriz.
