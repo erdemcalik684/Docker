@@ -7,3 +7,9 @@ docker container ls -a
 docker ps -a 
 docker ps 
 şeklinde yeni ve eski türevlerinde şeklinde kullanabiliriz.
+
+
+=> docker container ls 
+ile çalışan uygulama halen çalışıyor durumdadır.
+Hangi image'dan yaratıldı onun bilgisi yer alır.
+Her docker ile yaratılan her object nin bir ID si vardır.Unique'dir.
