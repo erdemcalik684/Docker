@@ -1,0 +1,3 @@
+=> docker container logs CONTAINERID'SI
+
+ilgili containerın log'una bakmak istersek bu şekilde bakabiliriz.
