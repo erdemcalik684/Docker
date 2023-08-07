@@ -1,0 +1,34 @@
+Docker Stats And Top 
+--------------------
+
+
+=>>>>>>>> İlgili container ortamında ne çalışıp çalışmadığını görmek için.
+Yani ilgili containerın processinde ne çalışıyor görmek için...
+(Containerın içine girmeye gerek kalmadan)
+
+=>>>>>>>>>>>   docker top Con1
+UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
+root                4377                4357                0                   20:21               ?                   00:00:00            nginx: master process nginx -g daemon off;
+uuidd               4421                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4422                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4423                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4424                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4425                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4426                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4427                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4428                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4429                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4430                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4431                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+uuidd               4432                4377                0                   20:21               ?                   00:00:00            nginx: worker process
+
+
+=>>>>>>>> İlgili containerın temelde ne kadar CPU ve RAM gibi parametrelerini kullandığını görmek için;
+
+=>>>>>>>>>>>>>>>>> docker stats CONTAINERADI veya CONTAINERID
+
+yada 
+
+tüm contaninerların harcadığı değerleri görmek için ise;
+
+=>>>>>>>>>>>>>>> docker stats diyebiliriz...
