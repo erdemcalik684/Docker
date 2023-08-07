@@ -1,9 +1,93 @@
 Linux sistemlerde uygulamalar çalıştıklarında bu uygulamalara 3 genel akış aracılığıyla sağlanır.
 giriş, çıkış ve stderr hata çıkışı için standart akışlardır. 
 
-STIN =>  Klavye ve başka bir uygulamadan gi,rişi içerebililen giriş aracıdır.Klavyeden terminalde bir komut yazdığımzda bu direk STDIN akışına gider.
-STDOUT => Gelen cevap olursa STDOUTa gönderir ve ekranda gösterir.
+STIN =>  Klavye ve başka bir uygulamadan girişi içerebililen giriş aracıdır.Klavyeden terminalde bir komut yazdığımzda bu direk STDIN akışına gider.
+STDOUT => Eğer gelen cevap olursa STDOUTa gönderir ve ekranda gösterir.
 Hata olursa STDER'a gösterir.
 
 Tüm linux komutları veya console uygulamaları STDIN,STDOUT ve STDERR akışlarına gönderilir.
+
+------------------------------
+EXAMPLE -1 
+------------------------------
+
+=>>>>>  docker container run -d --name appbir ozgurozturknet/app1
+        997cde52d1be215c4e3010646e950ffe5cdaa9bf6733fdb4d7d068c62e0f8185
+
+app1 imajından bir container oluşturduk ve görüldüğü üzere -d ile biz bunu arka planda çalışsın istedik.
+Fakat -d ile yaptığımız için uygulamanın bize verdiği mesajı göremedik.
+
+
+=>>>>>>> docker logs appbir 
+Merhaba arkadaşlar ben App1 uygulamasıyım.
+
+diye bize STDOUT  şeklindeki mesajı gösterdi.
+
+
+------------------------------
+EXAMPLE -2
+------------------------------
+
+=>>>>>  docker container run -d --name con1 -p 80:80 nginx
+f8eb4d4969d493ae418bf0170b70354e447545d69e6ff1d65149ce700ba6f4c0
+
+bir nginx imajından bir container oluşturduk
+
+Aynı şekilde 127.0.0.1 üzerinde sürekli refresh yapıp sayfayı yenilersek.
+
+
+=>>>>>>> docker logs con1 
+
+
+172.17.0.1 - - [07/Aug/2023:20:05:45 +0000] "GET / HTTP/1.1" 200 615 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+2023/08/07 20:05:45 [error] 30#30: *1 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "127.0.0.1", referrer: "http://127.0.0.1/"
+172.17.0.1 - - [07/Aug/2023:20:05:45 +0000] "GET /favicon.ico HTTP/1.1" 404 153 "http://127.0.0.1/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:48 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:48 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:48 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:48 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+172.17.0.1 - - [07/Aug/2023:20:05:48 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+
+şeklinde bize yaptığım isteklerin listesini atacaktır.
+
+------------------------------
+EXAMPLE - 3 
+------------------------------
+Örneğin : 127.0.0.1/deneme.html şeklinde olmayan sayfayı aratalım.
+
+=>>>>>>> docker logs con1 
+
+
+2023/08/07 20:08:21 [error] 29#29: *2 open() "/usr/share/nginx/html/deneme.html" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /deneme.html HTTP/1.1", host: "127.0.0.1"
+172.17.0.1 - - [07/Aug/2023:20:08:21 +0000] "GET /deneme.html HTTP/1.1" 404 153 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0" "-"
+
+
+görüldüğü üzere STDERRR  akışı bize hata mesajını gösterdi.
+
+------------------------------
+EXAMPLE - 3  --- FAYDALI ÖRNEK 
+------------------------------
+
+NGINX  bu STDIN-OUT-ERROR  akışlarını bize gösterebilmek için 2 farklı dosyaya yazmakta.
+Aksi halde biz bunları NGINX üzerinden göremeyecektik.
+
+===>>>>> docker exec -it con1 sh
+# cd /var/log/nginx
+# ls
+access.log  error.log
+# ls -l
+total 0
+lrwxrwxrwx 1 root root 11 Jul  4 17:24 access.log -> /dev/stdout
+lrwxrwxrwx 1 root root 11 Jul  4 17:24 error.log -> /dev/stderr
+#
+
+görüldüğü üzerei gelen komut stdout ise, access.log dosyasına yaz ve o şekilde bize gösteriyor.
+gelen komut stderr'a uyumlu ise error.log dosyasına yaz ve o şekilde bize gösteriyor.
 
