@@ -1,0 +1,9 @@
+Linux sistemlerde uygulamalar çalıştıklarında bu uygulamalara 3 genel akış aracılığıyla sağlanır.
+giriş, çıkış ve stderr hata çıkışı için standart akışlardır. 
+
+STIN =>  Klavye ve başka bir uygulamadan gi,rişi içerebililen giriş aracıdır.Klavyeden terminalde bir komut yazdığımzda bu direk STDIN akışına gider.
+STDOUT => Gelen cevap olursa STDOUTa gönderir ve ekranda gösterir.
+Hata olursa STDER'a gösterir.
+
+Tüm linux komutları veya console uygulamaları STDIN,STDOUT ve STDERR akışlarına gönderilir.
+
